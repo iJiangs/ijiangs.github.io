@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: http://ijiangs.github.io/sitemap.xml
