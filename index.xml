@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Jings&#39; Blog</title>
+    <title>Jiangs&#39; Blog</title>
     <link>http://ijiangs.github.io/</link>
-    <description>Recent content on Jings&#39; Blog</description>
+    <description>Recent content on Jiangs&#39; Blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Thu, 02 Jul 2020 18:41:10 +0800</lastBuildDate>
@@ -12,12 +12,21 @@
     
     
     <item>
+      <title>我的maven仓库配置</title>
+      <link>http://ijiangs.github.io/post/%E6%88%91%E7%9A%84maven%E4%BB%93%E5%BA%93%E9%85%8D%E7%BD%AE/</link>
+      <pubDate>Mon, 06 Jul 2020 09:21:10 +0800</pubDate>
+      
+      <guid>http://ijiangs.github.io/post/%E6%88%91%E7%9A%84maven%E4%BB%93%E5%BA%93%E9%85%8D%E7%BD%AE/</guid>
+      <description>&amp;lt;mirror&amp;gt; &amp;lt;id&amp;gt;alimaven&amp;lt;/id&amp;gt; &amp;lt;name&amp;gt;aliyun maven&amp;lt;/name&amp;gt; &amp;lt;url&amp;gt;http://maven.aliyun.com/nexus/content/groups/public/&amp;lt;/url&amp;gt; &amp;lt;mirrorOf&amp;gt;central&amp;lt;/mirrorOf&amp;gt; &amp;lt;/mirror&amp;gt; &amp;lt;mirror&amp;gt; &amp;lt;id&amp;gt;central&amp;lt;/id&amp;gt; &amp;lt;name&amp;gt;Maven Repository Switchboard&amp;lt;/name&amp;gt; &amp;lt;url&amp;gt;http://repo1.maven.org/maven2/&amp;lt;/url&amp;gt; &amp;lt;mirrorOf&amp;gt;central&amp;lt;/mirrorOf&amp;gt; &amp;lt;/mirror&amp;gt; &amp;lt;mirror&amp;gt; &amp;lt;id&amp;gt;repo2&amp;lt;/id&amp;gt; &amp;lt;mirrorOf&amp;gt;central&amp;lt;/mirrorOf&amp;gt; &amp;lt;name&amp;gt;Human Readable Name for this Mirror.&amp;lt;/name&amp;gt; &amp;lt;url&amp;gt;http://repo2.maven.org/maven2/&amp;lt;/url&amp;gt; &amp;lt;/mirror&amp;gt; &amp;lt;mirror&amp;gt; &amp;lt;id&amp;gt;ibiblio&amp;lt;/id&amp;gt; &amp;lt;mirrorOf&amp;gt;central&amp;lt;/mirrorOf&amp;gt; &amp;lt;name&amp;gt;Human Readable Name for this Mirror.&amp;lt;/name&amp;gt; &amp;lt;url&amp;gt;http://mirrors.ibiblio.org/pub/mirrors/maven2/&amp;lt;/url&amp;gt; &amp;lt;/mirror&amp;gt; &amp;lt;mirror&amp;gt; &amp;lt;id&amp;gt;jboss-public-repository-group&amp;lt;/id&amp;gt; &amp;lt;mirrorOf&amp;gt;central&amp;lt;/mirrorOf&amp;gt; &amp;lt;name&amp;gt;JBoss Public Repository Group&amp;lt;/name&amp;gt; &amp;lt;url&amp;gt;http://repository.jboss.org/nexus/content/groups/public&amp;lt;/url&amp;gt; &amp;lt;/mirror&amp;gt; &amp;lt;mirror&amp;gt; &amp;lt;id&amp;gt;maven.net.cn&amp;lt;/id&amp;gt; &amp;lt;name&amp;gt;oneof the central mirrors in china&amp;lt;/name&amp;gt; &amp;lt;url&amp;gt;http://maven.net.cn/content/groups/public/&amp;lt;/url&amp;gt; &amp;lt;mirrorOf&amp;gt;central&amp;lt;/mirrorOf&amp;gt; &amp;lt;/mirror&amp;gt;</description>
+    </item>
+    
+    <item>
       <title>第一篇hugo博客</title>
       <link>http://ijiangs.github.io/post/%E7%AC%AC%E4%B8%80%E7%AF%87hugo%E5%8D%9A%E5%AE%A2/</link>
       <pubDate>Thu, 02 Jul 2020 20:13:20 +0800</pubDate>
       
       <guid>http://ijiangs.github.io/post/%E7%AC%AC%E4%B8%80%E7%AF%87hugo%E5%8D%9A%E5%AE%A2/</guid>
-      <description>#Hugo 第一篇博客准备记录一下hugo部署的过程。</description>
+      <description>Hugo 第一篇博客准备记录一下hugo部署的过程。</description>
     </item>
     
     <item>
