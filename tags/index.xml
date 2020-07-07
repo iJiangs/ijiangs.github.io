@@ -38,5 +38,23 @@
       <description></description>
     </item>
     
+    <item>
+      <title>Java</title>
+      <link>http://ijiangs.github.io/tags/java/</link>
+      <pubDate>Mon, 06 Jul 2020 09:21:10 +0800</pubDate>
+      
+      <guid>http://ijiangs.github.io/tags/java/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Maven</title>
+      <link>http://ijiangs.github.io/tags/maven/</link>
+      <pubDate>Mon, 06 Jul 2020 09:21:10 +0800</pubDate>
+      
+      <guid>http://ijiangs.github.io/tags/maven/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>
