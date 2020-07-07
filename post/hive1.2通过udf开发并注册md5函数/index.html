@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Hive1.2通过UDF开发并注册md5函数 - Jiangs&#39; Blog</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="jiangs" /><meta name="description" content="因为公司使用的Hive版本是1.2，没有自带md5函数， 于是通过开发udf函数来实现该功能。我们使用IDEA和Maven来开发和构建。 创建项" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.70.0 with theme even" />
+
+
+<link rel="canonical" href="http://ijiangs.github.io/post/hive1.2%E9%80%9A%E8%BF%87udf%E5%BC%80%E5%8F%91%E5%B9%B6%E6%B3%A8%E5%86%8Cmd5%E5%87%BD%E6%95%B0/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+
+<link href="/sass/main.min.8c3cbcb0324c2bb4875ceccba4007cbad4b4ac8377f33af9953c3e7684534a50.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Hive1.2通过UDF开发并注册md5函数" />
+<meta property="og:description" content="因为公司使用的Hive版本是1.2，没有自带md5函数， 于是通过开发udf函数来实现该功能。我们使用IDEA和Maven来开发和构建。 创建项" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://ijiangs.github.io/post/hive1.2%E9%80%9A%E8%BF%87udf%E5%BC%80%E5%8F%91%E5%B9%B6%E6%B3%A8%E5%86%8Cmd5%E5%87%BD%E6%95%B0/" />
+<meta property="article:published_time" content="2020-07-07T10:21:32+08:00" />
+<meta property="article:modified_time" content="2020-07-07T10:21:32+08:00" />
+<meta itemprop="name" content="Hive1.2通过UDF开发并注册md5函数">
+<meta itemprop="description" content="因为公司使用的Hive版本是1.2，没有自带md5函数， 于是通过开发udf函数来实现该功能。我们使用IDEA和Maven来开发和构建。 创建项">
+<meta itemprop="datePublished" content="2020-07-07T10:21:32&#43;08:00" />
+<meta itemprop="dateModified" content="2020-07-07T10:21:32&#43;08:00" />
+<meta itemprop="wordCount" content="668">
+
+
+
+<meta itemprop="keywords" content="hive,hadoop,md5," /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Hive1.2通过UDF开发并注册md5函数"/>
+<meta name="twitter:description" content="因为公司使用的Hive版本是1.2，没有自带md5函数， 于是通过开发udf函数来实现该功能。我们使用IDEA和Maven来开发和构建。 创建项"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">Jiangs&#39; Blog</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">Jiangs&#39; Blog</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Hive1.2通过UDF开发并注册md5函数</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-07-07 </span>
+        
+        
+      </div>
+    </header>
+
+    <div class="post-toc" id="post-toc">
+  <h2 class="post-toc-title">文章目录</h2>
+  <div class="post-toc-content always-active">
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#添加dependency">添加dependency</a></li>
+    <li><a href="#编写代码">编写代码</a></li>
+    <li><a href="#测试md5">测试MD5</a></li>
+    <li><a href="#编译打包">编译打包</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#上传jar包到hdfs">上传jar包到hdfs</a></li>
+    <li><a href="#将jar包添加到hive">将jar包添加到hive</a></li>
+    <li><a href="#创建临时udf">创建临时UDF</a></li>
+    <li><a href="#创建永久udf">创建永久UDF</a></li>
+    <li><a href="#测试udf">测试UDF</a></li>
+  </ul>
+</nav>
+  </div>
+</div>
+    <div class="post-content">
+      <p>因为公司使用的Hive版本是1.2，没有自带md5函数， 于是通过开发udf函数来实现该功能。我们使用IDEA和Maven来开发和构建。</p>
+<h1 id="创建项目">创建项目</h1>
+<p>打开IntelliJ IDEA。
+File =&gt; New =&gt; Project =&gt;Maven =&gt;勾选 Create from archetype =&gt; org.apache.maven.archetypes:maven-archetype-quickstart。
+自己配置好groupId和artifactId。</p>
+<h1 id="开发编译">开发编译</h1>
+<h2 id="添加dependency">添加dependency</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;dependency&gt;</span>
+  <span class="nt">&lt;groupId&gt;</span>org.apache.hive<span class="nt">&lt;/groupId&gt;</span>
+  <span class="nt">&lt;artifactId&gt;</span>hive-exec<span class="nt">&lt;/artifactId&gt;</span>
+  <span class="nt">&lt;version&gt;</span>0.13.0<span class="nt">&lt;/versioin&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+<span class="nt">&lt;dependency&gt;</span>
+  <span class="nt">&lt;groupId&gt;</span>org.apache.hadoop<span class="nt">&lt;/groupId&gt;</span>
+  <span class="nt">&lt;artifactId&gt;</span>hadoop-common<span class="nt">&lt;/artifactId&gt;</span>
+  <span class="nt">&lt;version&gt;</span>2.4.0<span class="nt">&lt;/versioin&gt;</span>
+<span class="nt">&lt;/dependency&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="编写代码">编写代码</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.company.udf</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.apache.commons.lang.StringUtils</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.apache.hadoop.hive.ql.exec.UDF</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.security.MessageDigest</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MD5</span> <span class="kd">extends</span> <span class="n">UDF</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="n">String</span> <span class="nf">evaluate</span> <span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">str</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">StringUtils</span><span class="o">.</span><span class="na">isBlank</span><span class="o">(</span><span class="n">str</span><span class="o">)){</span>
+            <span class="k">return</span> <span class="s">&#34;&#34;</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">String</span> <span class="n">digest</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="n">StringBuffer</span> <span class="n">buffer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuffer</span><span class="o">();</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">MessageDigest</span> <span class="n">digester</span> <span class="o">=</span> <span class="n">MessageDigest</span><span class="o">.</span><span class="na">getInstance</span><span class="o">(</span><span class="s">&#34;md5&#34;</span><span class="o">);</span>
+            <span class="kt">byte</span><span class="o">[]</span> <span class="n">digestArray</span> <span class="o">=</span> <span class="n">digester</span><span class="o">.</span><span class="na">digest</span><span class="o">(</span><span class="n">str</span><span class="o">.</span><span class="na">getBytes</span><span class="o">(</span><span class="s">&#34;UTF-8&#34;</span><span class="o">));</span>
+            <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">digestArray</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+                <span class="n">buffer</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">String</span><span class="o">.</span><span class="na">format</span><span class="o">(</span><span class="s">&#34;%02x&#34;</span><span class="o">,</span> <span class="n">digestArray</span><span class="o">[</span><span class="n">i</span><span class="o">]));</span>
+            <span class="o">}</span>
+            <span class="n">digest</span> <span class="o">=</span> <span class="n">buffer</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">digest</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="测试md5">测试MD5</h2>
+<p>可以在上面的类代码中添加如下代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span> <span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span> <span class="o">)</span> <span class="o">{</span>
+    <span class="n">MD5</span> <span class="n">md5</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MD5</span><span class="o">();</span>
+    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">md5</span><span class="o">.</span><span class="na">evaluate</span><span class="o">(</span><span class="s">&#34;hello&#34;</span><span class="o">));</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="编译打包">编译打包</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">mvn</span> <span class="n">clean</span> <span class="n">package</span> <span class="n">-DskipTests</span>
+</code></pre></td></tr></table>
+</div>
+</div><h1 id="注册到hive">注册到Hive</h1>
+<h2 id="上传jar包到hdfs">上传jar包到hdfs</h2>
+<p>在这之前，我们一般会把jar上传到Hive机器的本地文件系统，记住要使用二进制传输方式。如果使用的secureCRT的rz命令，默认为勾选ascii方式，需要取消这个选项。</p>
+<p>我们可以用一下命令查看jar包中的类，不报错就说明上传没问题。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">jar</span> <span class="n">tf</span> <span class="n">xxx</span><span class="p">.</span><span class="n">jar</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>使用如下命令上传到hdfs:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">hadoop</span> <span class="n">fs</span> <span class="n">-put</span> <span class="n">MD5</span><span class="p">.</span><span class="n">jar</span> <span class="p">/</span><span class="n">tmp</span><span class="p">/</span><span class="n">udf</span><span class="p">/</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="将jar包添加到hive">将jar包添加到hive</h2>
+<p>后面的路径为jar包所在的绝对路径。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">hive</span><span class="p">&gt;</span> <span class="n">add</span> <span class="n">jar</span> <span class="n">hdfs</span><span class="err">:</span><span class="p">///</span><span class="n">tmp</span><span class="p">/</span><span class="n">udf</span><span class="p">/</span><span class="n">MD5</span><span class="p">.</span><span class="n">jar</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="创建临时udf">创建临时UDF</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">hive</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">temporary</span> <span class="k">function</span> <span class="n">md5</span> <span class="k">as</span> <span class="s1">&#39;com.company.udf.MD5&#39;</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="创建永久udf">创建永久UDF</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="n">hive</span><span class="o">&gt;</span> <span class="k">create</span> <span class="k">function</span> <span class="n">md5</span> <span class="k">as</span> <span class="s1">&#39;com.company.udf.MD5&#39;</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="测试udf">测试UDF</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span> <span class="n">md5</span><span class="p">(</span><span class="s1">&#39;hadoop&#39;</span><span class="p">);</span>
+<span class="c1">--结果： 3abb766da6c2c2d7739f3cb7799a4caa
+</span><span class="c1">--删除临时函数
+</span><span class="c1"></span><span class="k">DROP</span> <span class="k">TEMPORARY</span> <span class="k">FUNCTION</span> <span class="p">[</span><span class="k">IF</span> <span class="k">EXISTS</span><span class="p">]</span> <span class="n">function_name</span><span class="p">;</span>
+<span class="c1">--删除永久函数
+</span><span class="c1"></span><span class="k">DROP</span> <span class="k">FUNCTION</span> <span class="p">[</span><span class="k">IF</span> <span class="k">EXISTS</span><span class="p">]</span> <span class="n">function_name</span><span class="p">;</span>
+<span class="c1">--重新加载函数 hive1.2.0之后支持
+</span><span class="c1"></span><span class="n">RELOAD</span> <span class="k">FUNCTION</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div>
+    </div>
+
+    <div class="post-copyright">
+  <p class="copyright-item">
+    <span class="item-title">文章作者</span>
+    <span class="item-content">jiangs</span>
+  </p>
+  <p class="copyright-item">
+    <span class="item-title">上次更新</span>
+    <span class="item-content">
+        2020-07-07
+        
+    </span>
+  </p>
+  
+  
+</div>
+<footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/hive/">hive</a>
+          <a href="/tags/hadoop/">hadoop</a>
+          <a href="/tags/md5/">md5</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/%E6%88%91%E7%9A%84maven%E4%BB%93%E5%BA%93%E9%85%8D%E7%BD%AE/">
+            <span class="next-text nav-default">我的maven仓库配置</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="mailto:your@email.com" class="iconfont icon-email" title="email"></a>
+      <a href="http://localhost:1313" class="iconfont icon-stack-overflow" title="stack-overflow"></a>
+      <a href="http://localhost:1313" class="iconfont icon-twitter" title="twitter"></a>
+      <a href="http://localhost:1313" class="iconfont icon-facebook" title="facebook"></a>
+      <a href="http://localhost:1313" class="iconfont icon-linkedin" title="linkedin"></a>
+      <a href="http://localhost:1313" class="iconfont icon-google" title="google"></a>
+      <a href="http://localhost:1313" class="iconfont icon-github" title="github"></a>
+      <a href="http://localhost:1313" class="iconfont icon-weibo" title="weibo"></a>
+      <a href="http://localhost:1313" class="iconfont icon-zhihu" title="zhihu"></a>
+      <a href="http://localhost:1313" class="iconfont icon-douban" title="douban"></a>
+      <a href="http://localhost:1313" class="iconfont icon-pocket" title="pocket"></a>
+      <a href="http://localhost:1313" class="iconfont icon-tumblr" title="tumblr"></a>
+      <a href="http://localhost:1313" class="iconfont icon-instagram" title="instagram"></a>
+      <a href="http://localhost:1313" class="iconfont icon-gitlab" title="gitlab"></a>
+      <a href="http://localhost:1313" class="iconfont icon-bilibili" title="bilibili"></a>
+  <a href="http://ijiangs.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2020
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">jiangs</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+
+
+
+<script type="text/javascript" src="/js/main.min.d7b7ada643c9c1a983026e177f141f7363b4640d619caf01d8831a6718cd44ea.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

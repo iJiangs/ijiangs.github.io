@@ -2,8 +2,43 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://ijiangs.github.io/tags/hadoop/</loc>
+    <lastmod>2020-07-07T10:21:32+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://ijiangs.github.io/tags/hive/</loc>
+    <lastmod>2020-07-07T10:21:32+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://ijiangs.github.io/post/hive1.2%E9%80%9A%E8%BF%87udf%E5%BC%80%E5%8F%91%E5%B9%B6%E6%B3%A8%E5%86%8Cmd5%E5%87%BD%E6%95%B0/</loc>
+    <lastmod>2020-07-07T10:21:32+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://ijiangs.github.io/tags/md5/</loc>
+    <lastmod>2020-07-07T10:21:32+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>http://ijiangs.github.io/post/</loc>
-    <lastmod>2020-07-06T09:21:10+08:00</lastmod>
+    <lastmod>2020-07-07T10:21:32+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>http://ijiangs.github.io/tags/</loc>
+    <lastmod>2020-07-07T10:21:32+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
@@ -38,12 +73,6 @@
   
   <url>
     <loc>http://ijiangs.github.io/categories/</loc>
-    <changefreq>weekly</changefreq>
-    <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>http://ijiangs.github.io/tags/</loc>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>

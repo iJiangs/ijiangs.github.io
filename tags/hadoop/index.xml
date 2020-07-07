@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>hadoop on Jiangs&#39; Blog</title>
+    <link>http://ijiangs.github.io/tags/hadoop/</link>
+    <description>Recent content in hadoop on Jiangs&#39; Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Tue, 07 Jul 2020 10:21:32 +0800</lastBuildDate>
+    
+	<atom:link href="http://ijiangs.github.io/tags/hadoop/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Hive1.2通过UDF开发并注册md5函数</title>
+      <link>http://ijiangs.github.io/post/hive1.2%E9%80%9A%E8%BF%87udf%E5%BC%80%E5%8F%91%E5%B9%B6%E6%B3%A8%E5%86%8Cmd5%E5%87%BD%E6%95%B0/</link>
+      <pubDate>Tue, 07 Jul 2020 10:21:32 +0800</pubDate>
+      
+      <guid>http://ijiangs.github.io/post/hive1.2%E9%80%9A%E8%BF%87udf%E5%BC%80%E5%8F%91%E5%B9%B6%E6%B3%A8%E5%86%8Cmd5%E5%87%BD%E6%95%B0/</guid>
+      <description>因为公司使用的Hive版本是1.2，没有自带md5函数， 于是通过开发udf函数来实现该功能。我们使用IDEA和Maven来开发和构建。 创建项</description>
+    </item>
+    
+  </channel>
+</rss>
